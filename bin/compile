@@ -27,7 +27,7 @@ tar -xf "${CACHE_DIR}/$ASPELL_VERSION.tar.gz" -C ${CACHE_DIR} | indent
 
 echo "-----> Compiling Aspell package"
 pushd "${CACHE_DIR}/${ASPELL_VERSION}"
-./configure --prefix="$BUILD_DIR/vendor/aspell" | indent
+./configure --enable-static --disable-rpath --prefix="$BUILD_DIR/vendor/aspell" | indent
 make | indent
 make install | indent
 popd
