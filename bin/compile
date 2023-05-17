@@ -1,0 +1,53 @@
+#!/bin/bash
+
+set -e
+
+indent() {
+  sed -u 's/^/       /'
+}
+
+BUILD_DIR=$1
+CACHE_DIR="$2/aspell"
+ASPELL_VERSION="aspell-0.60.8"
+ASPELL_SOURCE="https://ftp.gnu.org/gnu/aspell/$ASPELL_VERSION.tar.gz"
+DICT_VERSION="aspell6-en-2020.12.07-0"
+DICT_SOURCE="https://ftp.gnu.org/gnu/aspell/dict/en/$DICT_VERSION.tar.bz2"
+
+rm -rf $BUILD_DIR/* $CACHE_DIR/*
+
+mkdir -p $CACHE_DIR
+mkdir -p $BUILD_DIR/vendor
+mkdir -p $BUILD_DIR/vendor/aspell
+
+echo "-----> Download Aspell package"
+if [ -e "$CACHE_DIR/$ASPELL_VERSION" ]; then
+  echo "Using cached data" | indent
+else
+  curl -s -L $ASPELL_SOURCE -o "$CACHE_DIR/$ASPELL_VERSION.tar.gz" | indent
+  tar -xf "${CACHE_DIR}/$ASPELL_VERSION.tar.gz" -C ${CACHE_DIR} | indent
+fi
+
+echo "-----> Compiling Aspell package"
+pushd "${CACHE_DIR}/${ASPELL_VERSION}"
+./configure --prefix="$BUILD_DIR/vendor/aspell" | indent
+make | indent
+make install | indent
+popd
+
+echo "-----> Download Aspell dictionnary"
+if [ -e "${CACHE_DIR}/$DICT_VERSION}" ]; then
+   echo "Using cached date" | indent
+else
+  curl -s -L $DICT_SOURCE -o "$CACHE_DIR/$DICT_VERSION.tar.bz2" | indent
+  tar -xf "${CACHE_DIR}/$DICT_VERSION.tar.bz2" -C ${CACHE_DIR} | indent
+fi
+
+echo "-----> Compiling Aspell dictionary"
+pushd "${CACHE_DIR}/$DICT_VERSION"
+./configure --vars DESTDIR="$BUILD_DIR/vendor/aspell" \
+  ASPELL="$BUILD_DIR/vendor/aspell/bin/aspell" \
+  PREZIP="$BUILD_DIR/vendor/aspell/bin/prezip" | indent
+make | indent
+make install | indent
+popd
+
