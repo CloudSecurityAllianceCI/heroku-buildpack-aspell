@@ -19,7 +19,7 @@ mkdir -p $BUILD_DIR/vendor
 mkdir -p $BUILD_DIR/vendor/aspell
 mkdir -p $BUILD_DIR/vendor/aspell/shared
 
-rm -rf $CACHE_DIR
+rm -rf $CACHE_DIR/*
 
 echo "-----> Download Aspell package"
 curl -s -L $ASPELL_SOURCE -o "$CACHE_DIR/$ASPELL_VERSION.tar.gz" | indent
