@@ -17,6 +17,7 @@ DICT_SOURCE="https://ftp.gnu.org/gnu/aspell/dict/en/$DICT_VERSION.tar.bz2"
 mkdir -p $CACHE_DIR
 mkdir -p $BUILD_DIR/vendor
 mkdir -p $BUILD_DIR/vendor/aspell
+mkdir -p $BUILD_DIR/vendor/aspell/shared
 
 echo "-----> Download Aspell package"
 if [ -e "$CACHE_DIR/$ASPELL_VERSION" ]; then
@@ -43,7 +44,7 @@ fi
 
 echo "-----> Compiling Aspell dictionary"
 pushd "${CACHE_DIR}/$DICT_VERSION"
-./configure --vars DESTDIR="$BUILD_DIR/vendor/aspell" \
+./configure --vars DESTDIR="$BUILD_DIR/vendor/aspell/shared" \
   ASPELL="$BUILD_DIR/vendor/aspell/bin/aspell" \
   PREZIP="$BUILD_DIR/vendor/aspell/bin/prezip" | indent
 make | indent
