@@ -43,6 +43,6 @@ pushd "${CACHE_DIR}/$DICT_VERSION"
   PREZIP="$BUILD_DIR/vendor/aspell/bin/prezip" | indent
 make | indent
 make install | indent
-mv $BUILD_DIR/vendor/aspell/$BUILD_DIR/lib/aspell-0.60/* $BUILD_DIR/vendor/aspell/lib/aspell-0.60/
+mv $BUILD_DIR/vendor/aspell/$BUILD_DIR/vendor/aspell/lib/aspell-0.60/* $BUILD_DIR/vendor/aspell/lib/aspell-0.60/
 popd
 
