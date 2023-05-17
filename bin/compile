@@ -8,41 +8,14 @@ indent() {
 
 BUILD_DIR=$1
 CACHE_DIR="$2/aspell"
-ASPELL_VERSION="aspell-0.60.8"
-ASPELL_SOURCE="https://ftp.gnu.org/gnu/aspell/$ASPELL_VERSION.tar.gz"
-DICT_VERSION="aspell6-en-2020.12.07-0"
-DICT_SOURCE="https://ftp.gnu.org/gnu/aspell/dict/en/$DICT_VERSION.tar.bz2"
 
 
 mkdir -p $CACHE_DIR
 mkdir -p $BUILD_DIR/vendor
-mkdir -p $BUILD_DIR/vendor/aspell
-mkdir -p $BUILD_DIR/vendor/aspell/shared
-
-rm -rf $CACHE_DIR/*
+ASPELL=https://raw.githubusercontent.com/apannetrat/heroku-buildpack-aspell/main/aspell.tag.gz
 
 echo "-----> Download Aspell package"
-curl -s -L $ASPELL_SOURCE -o "$CACHE_DIR/$ASPELL_VERSION.tar.gz" | indent
-tar -xf "${CACHE_DIR}/$ASPELL_VERSION.tar.gz" -C ${CACHE_DIR} | indent
+curl -s -L $ASPELL -o "$CACHE_DIR/aspell.tar.gz" | indent
+tar -xf "${CACHE_DIR}/aspell.tar.gz" -C $BUILD_DIR/vendor | indent
 
-echo "-----> Compiling Aspell package"
-pushd "${CACHE_DIR}/${ASPELL_VERSION}"
-./configure --enable-static --disable-rpath --prefix="$BUILD_DIR/vendor/aspell" | indent
-make | indent
-make install | indent
-popd
-
-echo "-----> Download Aspell dictionnary"
-curl -s -L $DICT_SOURCE -o "$CACHE_DIR/$DICT_VERSION.tar.bz2" | indent
-tar -xf "${CACHE_DIR}/$DICT_VERSION.tar.bz2" -C ${CACHE_DIR} | indent
-
-echo "-----> Compiling Aspell dictionary"
-pushd "${CACHE_DIR}/$DICT_VERSION"
-./configure --vars DESTDIR="" \
-  ASPELL_FLAGS="--dict-dir='$BUILD_DIR/vendor/aspell/lib/aspell-0.60' --data-dir='$BUILD_DIR/vendor/aspell/lib/aspell-0.60'"\
-  ASPELL="$BUILD_DIR/vendor/aspell/bin/aspell" \
-  PREZIP="$BUILD_DIR/vendor/aspell/bin/prezip" | indent
-make | indent
-make install | indent
-popd
 
