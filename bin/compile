@@ -13,7 +13,6 @@ ASPELL_SOURCE="https://ftp.gnu.org/gnu/aspell/$ASPELL_VERSION.tar.gz"
 DICT_VERSION="aspell6-en-2020.12.07-0"
 DICT_SOURCE="https://ftp.gnu.org/gnu/aspell/dict/en/$DICT_VERSION.tar.bz2"
 
-rm -rf $BUILD_DIR/* $CACHE_DIR/*
 
 mkdir -p $CACHE_DIR
 mkdir -p $BUILD_DIR/vendor
