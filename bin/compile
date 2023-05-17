@@ -12,10 +12,21 @@ CACHE_DIR="$2/aspell"
 
 mkdir -p $CACHE_DIR
 mkdir -p $BUILD_DIR/vendor
-ASPELL=https://raw.githubusercontent.com/apannetrat/heroku-buildpack-aspell/main/aspell.tag.gz
+ASPELL=https://raw.githubusercontent.com/apannetrat/heroku-buildpack-aspell/main/aspell.tar.gz
 
 echo "-----> Download Aspell package"
 curl -s -L $ASPELL -o "$CACHE_DIR/aspell.tar.gz" | indent
+if [ -e "${CACHE_DIR}/aspell.tar.gz" ]; then
+  echo "Dowloaded archive" | indent
+else
+  echo "Failed to download $ASPELL" | indent
+  exit 1
+fi
 tar -xf "${CACHE_DIR}/aspell.tar.gz" -C $BUILD_DIR/vendor | indent
-
+if [ -e "$BUILD_DIR/vendor/aspell/bin/aspell" ]; then
+  echo "Installed executable" | indent
+else
+  echo "Failed to install aspell" | indent
+  exit 1
+fi
 
