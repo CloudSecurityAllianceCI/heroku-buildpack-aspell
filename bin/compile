@@ -38,11 +38,11 @@ tar -xf "${CACHE_DIR}/$DICT_VERSION.tar.bz2" -C ${CACHE_DIR} | indent
 
 echo "-----> Compiling Aspell dictionary"
 pushd "${CACHE_DIR}/$DICT_VERSION"
-./configure --vars DESTDIR="$BUILD_DIR/vendor/aspell" \
+./configure --vars DESTDIR="" \
+  ASPELL_FLAGS="--dict-dir='$BUILD_DIR/vendor/aspell/lib/aspell-0.60' --data-dir='$BUILD_DIR/vendor/aspell/lib/aspell-0.60'"\
   ASPELL="$BUILD_DIR/vendor/aspell/bin/aspell" \
   PREZIP="$BUILD_DIR/vendor/aspell/bin/prezip" | indent
 make | indent
 make install | indent
-mv $BUILD_DIR/vendor/aspell/$BUILD_DIR/vendor/aspell/lib/aspell-0.60/* $BUILD_DIR/vendor/aspell/lib/aspell-0.60/
 popd
 
