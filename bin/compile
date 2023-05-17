@@ -19,13 +19,11 @@ mkdir -p $BUILD_DIR/vendor
 mkdir -p $BUILD_DIR/vendor/aspell
 mkdir -p $BUILD_DIR/vendor/aspell/shared
 
+rm -rf $CACHE_DIR
+
 echo "-----> Download Aspell package"
-if [ -e "$CACHE_DIR/$ASPELL_VERSION" ]; then
-  echo "Using cached data" | indent
-else
-  curl -s -L $ASPELL_SOURCE -o "$CACHE_DIR/$ASPELL_VERSION.tar.gz" | indent
-  tar -xf "${CACHE_DIR}/$ASPELL_VERSION.tar.gz" -C ${CACHE_DIR} | indent
-fi
+curl -s -L $ASPELL_SOURCE -o "$CACHE_DIR/$ASPELL_VERSION.tar.gz" | indent
+tar -xf "${CACHE_DIR}/$ASPELL_VERSION.tar.gz" -C ${CACHE_DIR} | indent
 
 echo "-----> Compiling Aspell package"
 pushd "${CACHE_DIR}/${ASPELL_VERSION}"
@@ -35,12 +33,8 @@ make install | indent
 popd
 
 echo "-----> Download Aspell dictionnary"
-if [ -e "${CACHE_DIR}/$DICT_VERSION}" ]; then
-   echo "Using cached date" | indent
-else
-  curl -s -L $DICT_SOURCE -o "$CACHE_DIR/$DICT_VERSION.tar.bz2" | indent
-  tar -xf "${CACHE_DIR}/$DICT_VERSION.tar.bz2" -C ${CACHE_DIR} | indent
-fi
+curl -s -L $DICT_SOURCE -o "$CACHE_DIR/$DICT_VERSION.tar.bz2" | indent
+tar -xf "${CACHE_DIR}/$DICT_VERSION.tar.bz2" -C ${CACHE_DIR} | indent
 
 echo "-----> Compiling Aspell dictionary"
 pushd "${CACHE_DIR}/$DICT_VERSION"
